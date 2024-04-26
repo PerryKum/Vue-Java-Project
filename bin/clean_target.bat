@@ -1,7 +1,8 @@
+chcp 65001
+
 @echo off
-echo.
-echo [信息] 清理工程target生成路径。
-echo.
+
+echo 【信息】清理target
 
 %~d0
 cd %~dp0
