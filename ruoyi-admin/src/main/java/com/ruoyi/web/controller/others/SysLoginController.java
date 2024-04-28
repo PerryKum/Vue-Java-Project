@@ -1,4 +1,4 @@
-package com.ruoyi.web.controller.system;
+package com.ruoyi.web.controller.others;
 
 import java.util.List;
 import java.util.Set;
