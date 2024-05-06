@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"../../../../../../mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.sites.mapper.SitesSiteMapper">
+    
+    <resultMap type="SitesSite" id="SitesSiteResult">
+        <result property="siteId"    column="site_ID"    />
+        <result property="logo"    column="logo"    />
+        <result property="siteName"    column="siteName"    />
+        <result property="siteShortName"    column="siteShortName"    />
+        <result property="siteKey"    column="site_key"    />
+        <result property="address"    column="address"    />
+        <result property="serviceLine"    column="serviceLine"    />
+        <result property="picture"    column="picture"    />
+        <result property="isactive"    column="isactive"    />
+        <result property="longitude"    column="longitude"    />
+        <result property="latitude"    column="latitude"    />
+        <result property="description"    column="description"    />
+    </resultMap>
+
+    <sql id="selectSitesSiteVo">
+        select site_ID, logo, siteName, siteShortName, site_key, address, serviceLine, picture, isactive, longitude, latitude, description from sites_site
+    </sql>
+
+    <select id="selectSitesSiteList" parameterType="SitesSite" resultMap="SitesSiteResult">
+        <include refid="selectSitesSiteVo"/>
+        <where>  
+            <if test="siteId != null  and siteId != ''"> and site_ID = #{siteId}</if>
+            <if test="logo != null  and logo != ''"> and logo = #{logo}</if>
+            <if test="siteName != null  and siteName != ''"> and siteName like concat('%', #{siteName}, '%')</if>
+            <if test="siteShortName != null  and siteShortName != ''"> and siteShortName like concat('%', #{siteShortName}, '%')</if>
+            <if test="siteKey != null  and siteKey != ''"> and site_key = #{siteKey}</if>
+            <if test="address != null  and address != ''"> and address like concat('%', #{address}, '%')</if>
+            <if test="serviceLine != null  and serviceLine != ''"> and serviceLine = #{serviceLine}</if>
+            <if test="picture != null  and picture != ''"> and picture = #{picture}</if>
+            <if test="isactive != null "> and isactive = #{isactive}</if>
+            <if test="longitude != null "> and longitude like concat('%', #{longitude}, '%')</if>
+            <if test="latitude != null "> and latitude like concat('%', #{latitude}, '%')</if>
+            <if test="description != null  and description != ''"> and description like concat('%', #{description}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectSitesSiteBySiteId" parameterType="String" resultMap="SitesSiteResult">
+        <include refid="selectSitesSiteVo"/>
+        where site_ID = #{siteId}
+    </select>
+        
+    <insert id="insertSitesSite" parameterType="SitesSite" useGeneratedKeys="true" keyProperty="siteId">
+        insert into sites_site
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="logo != null and logo != ''">logo,</if>
+            <if test="siteName != null and siteName != ''">siteName,</if>
+            <if test="siteShortName != null">siteShortName,</if>
+            <if test="siteKey != null and siteKey != ''">site_key,</if>
+            <if test="address != null and address != ''">address,</if>
+            <if test="serviceLine != null">serviceLine,</if>
+            <if test="picture != null">picture,</if>
+            <if test="isactive != null">isactive,</if>
+            <if test="longitude != null">longitude,</if>
+            <if test="latitude != null">latitude,</if>
+            <if test="description != null">description,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="logo != null and logo != ''">#{logo},</if>
+            <if test="siteName != null and siteName != ''">#{siteName},</if>
+            <if test="siteShortName != null">#{siteShortName},</if>
+            <if test="siteKey != null and siteKey != ''">#{siteKey},</if>
+            <if test="address != null and address != ''">#{address},</if>
+            <if test="serviceLine != null">#{serviceLine},</if>
+            <if test="picture != null">#{picture},</if>
+            <if test="isactive != null">#{isactive},</if>
+            <if test="longitude != null">#{longitude},</if>
+            <if test="latitude != null">#{latitude},</if>
+            <if test="description != null">#{description},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSitesSite" parameterType="SitesSite">
+        update sites_site
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="logo != null and logo != ''">logo = #{logo},</if>
+            <if test="siteName != null and siteName != ''">siteName = #{siteName},</if>
+            <if test="siteShortName != null">siteShortName = #{siteShortName},</if>
+            <if test="siteKey != null and siteKey != ''">site_key = #{siteKey},</if>
+            <if test="address != null and address != ''">address = #{address},</if>
+            <if test="serviceLine != null">serviceLine = #{serviceLine},</if>
+            <if test="picture != null">picture = #{picture},</if>
+            <if test="isactive != null">isactive = #{isactive},</if>
+            <if test="longitude != null">longitude = #{longitude},</if>
+            <if test="latitude != null">latitude = #{latitude},</if>
+            <if test="description != null">description = #{description},</if>
+        </trim>
+        where site_ID = #{siteId}
+    </update>
+
+    <delete id="deleteSitesSiteBySiteId" parameterType="String">
+        delete from sites_site where site_ID = #{siteId}
+    </delete>
+
+    <delete id="deleteSitesSiteBySiteIds" parameterType="String">
+        delete from sites_site where site_ID in 
+        <foreach item="siteId" collection="array" open="(" separator="," close=")">
+            #{siteId}
+        </foreach>
+    </delete>
+</mapper>
