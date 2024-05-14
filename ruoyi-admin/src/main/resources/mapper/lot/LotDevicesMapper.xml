@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"../../../../../../mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.lot.mapper.LotDevicesMapper">
+    
+    <resultMap type="LotDevices" id="LotDevicesResult">
+        <result property="deviceId"    column="device_ID"    />
+        <result property="deviceName"    column="device_name"    />
+        <result property="deviceType"    column="device_type"    />
+        <result property="deviceConnectType"    column="device_connect_type"    />
+        <result property="location"    column="location"    />
+        <result property="picture"    column="picture"    />
+        <result property="topic"    column="topic"    />
+        <result property="latitude"    column="latitude"    />
+        <result property="longitude"    column="longitude"    />
+        <result property="isactive"    column="isactive"    />
+        <result property="description"    column="description"    />
+    </resultMap>
+
+    <sql id="selectLotDevicesVo">
+        select device_ID, device_name, device_type, device_connect_type, location, picture, topic, latitude, longitude, isactive, description from lot_devices
+    </sql>
+
+    <select id="selectLotDevicesList" parameterType="LotDevices" resultMap="LotDevicesResult">
+        <include refid="selectLotDevicesVo"/>
+        <where>  
+            <if test="deviceId != null  and deviceId != ''"> and device_ID = #{deviceId}</if>
+            <if test="deviceName != null  and deviceName != ''"> and device_name like concat('%', #{deviceName}, '%')</if>
+            <if test="deviceType != null  and deviceType != ''"> and device_type like concat('%', #{deviceType}, '%')</if>
+            <if test="deviceConnectType != null  and deviceConnectType != ''"> and device_connect_type like concat('%', #{deviceConnectType}, '%')</if>
+            <if test="location != null  and location != ''"> and location like concat('%', #{location}, '%')</if>
+            <if test="topic != null  and topic != ''"> and topic like concat('%', #{topic}, '%')</if>
+            <if test="latitude != null "> and latitude = #{latitude}</if>
+            <if test="longitude != null "> and longitude = #{longitude}</if>
+            <if test="isactive != null "> and isactive = #{isactive}</if>
+            <if test="description != null  and description != ''"> and description like concat('%', #{description}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectLotDevicesByDeviceId" parameterType="String" resultMap="LotDevicesResult">
+        <include refid="selectLotDevicesVo"/>
+        where device_ID = #{deviceId}
+    </select>
+        
+    <insert id="insertLotDevices" parameterType="LotDevices" useGeneratedKeys="true" keyProperty="deviceId">
+        insert into lot_devices
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deviceName != null and deviceName != ''">device_name,</if>
+            <if test="deviceType != null and deviceType != ''">device_type,</if>
+            <if test="deviceConnectType != null and deviceConnectType != ''">device_connect_type,</if>
+            <if test="location != null and location != ''">location,</if>
+            <if test="picture != null">picture,</if>
+            <if test="topic != null and topic != ''">topic,</if>
+            <if test="latitude != null">latitude,</if>
+            <if test="longitude != null">longitude,</if>
+            <if test="isactive != null">isactive,</if>
+            <if test="description != null">description,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deviceName != null and deviceName != ''">#{deviceName},</if>
+            <if test="deviceType != null and deviceType != ''">#{deviceType},</if>
+            <if test="deviceConnectType != null and deviceConnectType != ''">#{deviceConnectType},</if>
+            <if test="location != null and location != ''">#{location},</if>
+            <if test="picture != null">#{picture},</if>
+            <if test="topic != null and topic != ''">#{topic},</if>
+            <if test="latitude != null">#{latitude},</if>
+            <if test="longitude != null">#{longitude},</if>
+            <if test="isactive != null">#{isactive},</if>
+            <if test="description != null">#{description},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLotDevices" parameterType="LotDevices">
+        update lot_devices
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="deviceName != null and deviceName != ''">device_name = #{deviceName},</if>
+            <if test="deviceType != null and deviceType != ''">device_type = #{deviceType},</if>
+            <if test="deviceConnectType != null and deviceConnectType != ''">device_connect_type = #{deviceConnectType},</if>
+            <if test="location != null and location != ''">location = #{location},</if>
+            <if test="picture != null">picture = #{picture},</if>
+            <if test="topic != null and topic != ''">topic = #{topic},</if>
+            <if test="latitude != null">latitude = #{latitude},</if>
+            <if test="longitude != null">longitude = #{longitude},</if>
+            <if test="isactive != null">isactive = #{isactive},</if>
+            <if test="description != null">description = #{description},</if>
+        </trim>
+        where device_ID = #{deviceId}
+    </update>
+
+    <delete id="deleteLotDevicesByDeviceId" parameterType="String">
+        delete from lot_devices where device_ID = #{deviceId}
+    </delete>
+
+    <delete id="deleteLotDevicesByDeviceIds" parameterType="String">
+        delete from lot_devices where device_ID in 
+        <foreach item="deviceId" collection="array" open="(" separator="," close=")">
+            #{deviceId}
+        </foreach>
+    </delete>
+</mapper>
