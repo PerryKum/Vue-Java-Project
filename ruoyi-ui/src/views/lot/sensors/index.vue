@@ -113,8 +113,8 @@
     />
 
     <!-- 添加或修改LOT 传感器管理对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="传感器名称" prop="sensorName">
           <el-input v-model="form.sensorName" placeholder="请输入传感器名称" />
         </el-form-item>

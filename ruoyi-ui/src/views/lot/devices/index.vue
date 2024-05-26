@@ -157,9 +157,6 @@
         <el-form-item label="设备经度" prop="longitude">
           <el-input v-model="form.longitude" placeholder="请输入设备经度" />
         </el-form-item>
-        <el-form-item label="是否可用" prop="isactive">
-          <el-input v-model="form.isactive" placeholder="请输入是否可用" />
-        </el-form-item>
         <el-form-item label="设备描述" prop="description">
           <el-input v-model="form.description" placeholder="请输入设备描述" />
         </el-form-item>

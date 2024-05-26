@@ -166,9 +166,6 @@
         <el-form-item label="现场图片" prop="picture">
           <el-input v-model="form.picture" placeholder="请输入现场图片" />
         </el-form-item>
-        <el-form-item label="是否可用" prop="isactive">
-          <el-input v-model="form.isactive" placeholder="请输入是否可用" />
-        </el-form-item>
         <el-form-item label="现场经度" prop="longitude">
           <el-input v-model="form.longitude" placeholder="请输入现场经度" />
         </el-form-item>
