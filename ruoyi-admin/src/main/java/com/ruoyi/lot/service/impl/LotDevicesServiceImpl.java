@@ -3,6 +3,10 @@ package com.ruoyi.lot.service.impl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
+import com.ruoyi.common.utils.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
+import com.ruoyi.lot.domain.LotSensors;
 import com.ruoyi.lot.mapper.LotDevicesMapper;
 import com.ruoyi.lot.domain.LotDevices;
 import com.ruoyi.lot.service.ILotDevicesService;
@@ -11,7 +15,7 @@ import com.ruoyi.lot.service.ILotDevicesService;
  * Lot设备管理Service业务层处理
  * 
  * @author Kum
- * @date 2024-05-14
+ * @date 2024-05-26
  */
 @Service
 public class LotDevicesServiceImpl implements ILotDevicesService 
@@ -49,10 +53,13 @@ public class LotDevicesServiceImpl implements ILotDevicesService
      * @param lotDevices Lot设备管理
      * @return 结果
      */
+    @Transactional
     @Override
     public int insertLotDevices(LotDevices lotDevices)
     {
-        return lotDevicesMapper.insertLotDevices(lotDevices);
+        int rows = lotDevicesMapper.insertLotDevices(lotDevices);
+        insertLotSensors(lotDevices);
+        return rows;
     }
 
     /**
@@ -61,9 +68,12 @@ public class LotDevicesServiceImpl implements ILotDevicesService
      * @param lotDevices Lot设备管理
      * @return 结果
      */
+    @Transactional
     @Override
     public int updateLotDevices(LotDevices lotDevices)
     {
+        lotDevicesMapper.deleteLotSensorsBySensorId(lotDevices.getDeviceId());
+        insertLotSensors(lotDevices);
         return lotDevicesMapper.updateLotDevices(lotDevices);
     }
 
@@ -73,9 +83,11 @@ public class LotDevicesServiceImpl implements ILotDevicesService
      * @param deviceIds 需要删除的Lot设备管理主键
      * @return 结果
      */
+    @Transactional
     @Override
     public int deleteLotDevicesByDeviceIds(String[] deviceIds)
     {
+        lotDevicesMapper.deleteLotSensorsBySensorIds(deviceIds);
         return lotDevicesMapper.deleteLotDevicesByDeviceIds(deviceIds);
     }
 
@@ -85,9 +97,35 @@ public class LotDevicesServiceImpl implements ILotDevicesService
      * @param deviceId Lot设备管理主键
      * @return 结果
      */
+    @Transactional
     @Override
     public int deleteLotDevicesByDeviceId(String deviceId)
     {
+        lotDevicesMapper.deleteLotSensorsBySensorId(deviceId);
         return lotDevicesMapper.deleteLotDevicesByDeviceId(deviceId);
+    }
+
+    /**
+     * 新增LOT 传感器管理信息
+     * 
+     * @param lotDevices Lot设备管理对象
+     */
+    public void insertLotSensors(LotDevices lotDevices)
+    {
+        List<LotSensors> lotSensorsList = lotDevices.getLotSensorsList();
+        String deviceId = lotDevices.getDeviceId();
+        if (StringUtils.isNotNull(lotSensorsList))
+        {
+            List<LotSensors> list = new ArrayList<LotSensors>();
+            for (LotSensors lotSensors : lotSensorsList)
+            {
+                lotSensors.setSensorId(deviceId);
+                list.add(lotSensors);
+            }
+            if (list.size() > 0)
+            {
+                lotDevicesMapper.batchLotSensors(list);
+            }
+        }
     }
 }

@@ -7,7 +7,7 @@ import com.ruoyi.lot.domain.LotDevices;
  * Lot设备管理Service接口
  * 
  * @author Kum
- * @date 2024-05-14
+ * @date 2024-05-26
  */
 public interface ILotDevicesService 
 {

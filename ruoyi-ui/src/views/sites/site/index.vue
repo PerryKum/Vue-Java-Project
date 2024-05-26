@@ -124,6 +124,12 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['sites:site:remove']"
           >删除</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-view"
+            @click="handleDetail(scope.row)"
+          >详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -178,6 +184,26 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 详情对话框 -->
+    <el-dialog :visible.sync="openDetailDialog" title="站点详情">
+      <div>
+        <p><strong>现场logo:</strong> <img :src="detail.logo" alt="现场Logo" v-if="detail.logo"></p>
+        <p><strong>现场名称:</strong> {{ detail.siteName }}</p>
+        <p><strong>现场简称:</strong> {{ detail.siteShortName }}</p>
+        <p><strong>权限字段:</strong> {{ detail.siteKey }}</p>
+        <p><strong>现场地址:</strong> {{ detail.address }}</p>
+        <p><strong>服务线:</strong> {{ detail.serviceLine }}</p>
+        <p><strong>现场图片:</strong> <img :src="detail.picture" alt="现场图片" v-if="detail.picture"></p>
+        <p><strong>是否可用:</strong> {{ detail.isactive }}</p>
+        <p><strong>现场经度:</strong> {{ detail.longitude }}</p>
+        <p><strong>现场纬度:</strong> {{ detail.latitude }}</p>
+        <p><strong>现场描述:</strong> {{ detail.description }}</p>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="openDetailDialog = false">关闭</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -206,6 +232,8 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 是否显示详情弹出层
+      openDetailDialog: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -225,6 +253,8 @@ export default {
       },
       // 表单参数
       form: {},
+      // 详情参数
+      detail: {},
       // 表单校验
       rules: {
         siteId: [
@@ -351,7 +381,24 @@ export default {
       this.download('sites/site/export', {
         ...this.queryParams
       }, `site_${new Date().getTime()}.xlsx`)
-    }
+    },
+    /** 详情按钮操作 */
+    handleDetail(row) {
+      const siteId = row.siteId || this.ids;
+      getSite(siteId).then(response => {
+        this.detail = response.data;
+        this.openDetailDialog = true;
+      });
+    },
   }
 };
 </script>
+
+<style scoped>
+.app-container {
+  padding: 20px;
+}
+.mb8 {
+  margin-bottom: 8px;
+}
+</style>

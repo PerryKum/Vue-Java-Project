@@ -2,12 +2,13 @@ package com.ruoyi.lot.mapper;
 
 import java.util.List;
 import com.ruoyi.lot.domain.LotDevices;
+import com.ruoyi.lot.domain.LotSensors;
 
 /**
  * Lot设备管理Mapper接口
  * 
  * @author Kum
- * @date 2024-05-14
+ * @date 2024-05-26
  */
 public interface LotDevicesMapper 
 {
@@ -58,4 +59,29 @@ public interface LotDevicesMapper
      * @return 结果
      */
     public int deleteLotDevicesByDeviceIds(String[] deviceIds);
+
+    /**
+     * 批量删除LOT 传感器管理
+     * 
+     * @param deviceIds 需要删除的数据主键集合
+     * @return 结果
+     */
+    public int deleteLotSensorsBySensorIds(String[] deviceIds);
+    
+    /**
+     * 批量新增LOT 传感器管理
+     * 
+     * @param lotSensorsList LOT 传感器管理列表
+     * @return 结果
+     */
+    public int batchLotSensors(List<LotSensors> lotSensorsList);
+    
+
+    /**
+     * 通过Lot设备管理主键删除LOT 传感器管理信息
+     * 
+     * @param deviceId Lot设备管理ID
+     * @return 结果
+     */
+    public int deleteLotSensorsBySensorId(String deviceId);
 }

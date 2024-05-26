@@ -25,7 +25,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * Lot设备管理Controller
  * 
  * @author Kum
- * @date 2024-05-14
+ * @date 2024-05-26
  */
 @RestController
 @RequestMapping("/lot/devices")
