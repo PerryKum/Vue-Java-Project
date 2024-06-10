@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"../../../../../../mybatis-3-mapper.dtd">
+<mapper namespace="com.leadec.lot.mapper.LotValuePoolsMapper">
+    
+    <resultMap type="LotValuePools" id="LotValuePoolsResult">
+        <result property="valueId"    column="value_ID"    />
+        <result property="valueName"    column="value_name"    />
+        <result property="unit"    column="unit"    />
+        <result property="intervalTime"    column="interval_time"    />
+        <result property="isactive"    column="isactive"    />
+        <result property="createData"    column="create_data"    />
+    </resultMap>
+
+    <sql id="selectLotValuePoolsVo">
+        select value_ID, value_name, unit, interval_time, isactive, create_data from lot_value_pools
+    </sql>
+
+    <select id="selectLotValuePoolsList" parameterType="LotValuePools" resultMap="LotValuePoolsResult">
+        <include refid="selectLotValuePoolsVo"/>
+        <where>  
+            <if test="valueId != null  and valueId != ''"> and value_ID = #{valueId}</if>
+            <if test="valueName != null  and valueName != ''"> and value_name like concat('%', #{valueName}, '%')</if>
+            <if test="unit != null  and unit != ''"> and unit = #{unit}</if>
+            <if test="intervalTime != null "> and interval_time = #{intervalTime}</if>
+            <if test="isactive != null "> and isactive = #{isactive}</if>
+            <if test="createData != null "> and create_data = #{createData}</if>
+        </where>
+    </select>
+    
+    <select id="selectLotValuePoolsByValueId" parameterType="String" resultMap="LotValuePoolsResult">
+        <include refid="selectLotValuePoolsVo"/>
+        where value_ID = #{valueId}
+    </select>
+        
+    <insert id="insertLotValuePools" parameterType="LotValuePools" useGeneratedKeys="true" keyProperty="valueId">
+        insert into lot_value_pools
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="valueName != null and valueName != ''">value_name,</if>
+            <if test="unit != null">unit,</if>
+            <if test="intervalTime != null">interval_time,</if>
+            <if test="isactive != null">isactive,</if>
+            <if test="createData != null">create_data,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="valueName != null and valueName != ''">#{valueName},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="intervalTime != null">#{intervalTime},</if>
+            <if test="isactive != null">#{isactive},</if>
+            <if test="createData != null">#{createData},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLotValuePools" parameterType="LotValuePools">
+        update lot_value_pools
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="valueName != null and valueName != ''">value_name = #{valueName},</if>
+            <if test="unit != null">unit = #{unit},</if>
+            <if test="intervalTime != null">interval_time = #{intervalTime},</if>
+            <if test="isactive != null">isactive = #{isactive},</if>
+            <if test="createData != null">create_data = #{createData},</if>
+        </trim>
+        where value_ID = #{valueId}
+    </update>
+
+    <delete id="deleteLotValuePoolsByValueId" parameterType="String">
+        delete from lot_value_pools where value_ID = #{valueId}
+    </delete>
+
+    <delete id="deleteLotValuePoolsByValueIds" parameterType="String">
+        delete from lot_value_pools where value_ID in 
+        <foreach item="valueId" collection="array" open="(" separator="," close=")">
+            #{valueId}
+        </foreach>
+    </delete>
+</mapper>

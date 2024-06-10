@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"../../../../../../mybatis-3-mapper.dtd">
+<mapper namespace="com.leadec.lot.mapper.LotSensorsMapper">
+    
+    <resultMap type="LotSensors" id="LotSensorsResult">
+        <result property="sensorId"    column="sensor_ID"    />
+        <result property="sensorName"    column="sensor_name"    />
+        <result property="sensorType"    column="sensor_type"    />
+        <result property="sensorTag"    column="sensor_tag"    />
+        <result property="isactive"    column="isactive"    />
+    </resultMap>
+
+    <sql id="selectLotSensorsVo">
+        select sensor_ID, sensor_name, sensor_type, sensor_tag, isactive from lot_sensors
+    </sql>
+
+    <select id="selectLotSensorsList" parameterType="LotSensors" resultMap="LotSensorsResult">
+        <include refid="selectLotSensorsVo"/>
+        <where>  
+            <if test="sensorId != null  and sensorId != ''"> and sensor_ID = #{sensorId}</if>
+            <if test="sensorName != null  and sensorName != ''"> and sensor_name like concat('%', #{sensorName}, '%')</if>
+            <if test="sensorType != null  and sensorType != ''"> and sensor_type = #{sensorType}</if>
+            <if test="sensorTag != null  and sensorTag != ''"> and sensor_tag = #{sensorTag}</if>
+            <if test="isactive != null "> and isactive = #{isactive}</if>
+        </where>
+    </select>
+    
+    <select id="selectLotSensorsBySensorId" parameterType="String" resultMap="LotSensorsResult">
+        <include refid="selectLotSensorsVo"/>
+        where sensor_ID = #{sensorId}
+    </select>
+        
+    <insert id="insertLotSensors" parameterType="LotSensors" useGeneratedKeys="true" keyProperty="sensorId">
+        insert into lot_sensors
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sensorName != null and sensorName != ''">sensor_name,</if>
+            <if test="sensorType != null">sensor_type,</if>
+            <if test="sensorTag != null">sensor_tag,</if>
+            <if test="isactive != null">isactive,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sensorName != null and sensorName != ''">#{sensorName},</if>
+            <if test="sensorType != null">#{sensorType},</if>
+            <if test="sensorTag != null">#{sensorTag},</if>
+            <if test="isactive != null">#{isactive},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLotSensors" parameterType="LotSensors">
+        update lot_sensors
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sensorName != null and sensorName != ''">sensor_name = #{sensorName},</if>
+            <if test="sensorType != null">sensor_type = #{sensorType},</if>
+            <if test="sensorTag != null">sensor_tag = #{sensorTag},</if>
+            <if test="isactive != null">isactive = #{isactive},</if>
+        </trim>
+        where sensor_ID = #{sensorId}
+    </update>
+
+    <delete id="deleteLotSensorsBySensorId" parameterType="String">
+        delete from lot_sensors where sensor_ID = #{sensorId}
+    </delete>
+
+    <delete id="deleteLotSensorsBySensorIds" parameterType="String">
+        delete from lot_sensors where sensor_ID in 
+        <foreach item="sensorId" collection="array" open="(" separator="," close=")">
+            #{sensorId}
+        </foreach>
+    </delete>
+</mapper>

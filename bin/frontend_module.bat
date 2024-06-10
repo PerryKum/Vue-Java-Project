@@ -2,6 +2,6 @@ chcp 65001
 
 @echo off
 
-cd ../ruoyi-ui
+cd ../leadec-ui
 npm i
 npm run dev

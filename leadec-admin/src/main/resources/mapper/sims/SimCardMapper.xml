@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"../../../../../../mybatis-3-mapper.dtd">
+<mapper namespace="com.leadec.sims.mapper.SimCardMapper">
+    
+    <resultMap type="SimCard" id="SimCardResult">
+        <result property="cardId"    column="card_ID"    />
+        <result property="startData"    column="startData"    />
+        <result property="supplier"    column="supplier"    />
+        <result property="numberID"    column="numberID"    />
+        <result property="picture"    column="picture"    />
+        <result property="isactive"    column="isactive"    />
+        <result property="costLevel"    column="costLevel"    />
+        <result property="SIMICMI"    column="SIMICMI"    />
+    </resultMap>
+
+    <sql id="selectSimCardVo">
+        select card_ID, startData, supplier, numberID, picture, isactive, costLevel, SIMICMI from sim_card
+    </sql>
+
+    <select id="selectSimCardList" parameterType="SimCard" resultMap="SimCardResult">
+        <include refid="selectSimCardVo"/>
+        <where>  
+            <if test="cardId != null  and cardId != ''"> and card_ID = #{cardId}</if>
+            <if test="startData != null "> and startData = #{startData}</if>
+            <if test="supplier != null  and supplier != ''"> and supplier like concat('%', #{supplier}, '%')</if>
+            <if test="numberID != null "> and numberID = #{numberID}</if>
+            <if test="isactive != null "> and isactive = #{isactive}</if>
+            <if test="costLevel != null  and costLevel != ''"> and costLevel = #{costLevel}</if>
+            <if test="SIMICMI != null  and SIMICMI != ''"> and SIMICMI = #{SIMICMI}</if>
+        </where>
+    </select>
+    
+    <select id="selectSimCardByCardId" parameterType="String" resultMap="SimCardResult">
+        <include refid="selectSimCardVo"/>
+        where card_ID = #{cardId}
+    </select>
+        
+    <insert id="insertSimCard" parameterType="SimCard" useGeneratedKeys="true" keyProperty="cardId">
+        insert into sim_card
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="startData != null">startData,</if>
+            <if test="supplier != null">supplier,</if>
+            <if test="numberID != null">numberID,</if>
+            <if test="picture != null">picture,</if>
+            <if test="isactive != null">isactive,</if>
+            <if test="costLevel != null">costLevel,</if>
+            <if test="SIMICMI != null">SIMICMI,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="startData != null">#{startData},</if>
+            <if test="supplier != null">#{supplier},</if>
+            <if test="numberID != null">#{numberID},</if>
+            <if test="picture != null">#{picture},</if>
+            <if test="isactive != null">#{isactive},</if>
+            <if test="costLevel != null">#{costLevel},</if>
+            <if test="SIMICMI != null">#{SIMICMI},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSimCard" parameterType="SimCard">
+        update sim_card
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="startData != null">startData = #{startData},</if>
+            <if test="supplier != null">supplier = #{supplier},</if>
+            <if test="numberID != null">numberID = #{numberID},</if>
+            <if test="picture != null">picture = #{picture},</if>
+            <if test="isactive != null">isactive = #{isactive},</if>
+            <if test="costLevel != null">costLevel = #{costLevel},</if>
+            <if test="SIMICMI != null">SIMICMI = #{SIMICMI},</if>
+        </trim>
+        where card_ID = #{cardId}
+    </update>
+
+    <delete id="deleteSimCardByCardId" parameterType="String">
+        delete from sim_card where card_ID = #{cardId}
+    </delete>
+
+    <delete id="deleteSimCardByCardIds" parameterType="String">
+        delete from sim_card where card_ID in 
+        <foreach item="cardId" collection="array" open="(" separator="," close=")">
+            #{cardId}
+        </foreach>
+    </delete>
+</mapper>
